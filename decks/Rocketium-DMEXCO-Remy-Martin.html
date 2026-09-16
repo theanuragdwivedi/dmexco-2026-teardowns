@@ -386,7 +386,12 @@
     background:var(--coal,#0D0D0D);color:#fff;font-family:var(--disp);font-weight:700;font-size:14px}
   #proofVeil .pfbar button{background:none;border:none;color:rgba(255,255,255,.7);font-size:22px;cursor:pointer;line-height:1;padding:2px 6px}
   #proofVeil .pfbar button:hover{color:#fff}
-  #proofVeil iframe{flex:1;border:0;width:100%}
+  #proofVeil #pfBody{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff}
+  #proofVeil #pfBody iframe,#proofVeil #pfBody embed,#proofVeil #pfBody video,#proofVeil #pfBody img{flex:1;border:0;width:100%;height:100%;max-width:100%}
+  #proofVeil .pfacts{display:flex;align-items:center;gap:16px}
+  #proofVeil .pfacts a{color:rgba(255,255,255,.72);font-size:13px;text-decoration:none;font-weight:700}
+  #proofVeil .pfacts a:hover{color:#fff}
+  #proofVeil .pfhint{padding:10px 18px;font-size:12.5px;color:var(--ink-3);background:#F3F3F3;flex:none}
   #zoomveil{position:fixed;inset:0;z-index:94;background:rgba(6,6,10,.55);opacity:0;visibility:hidden;transition:opacity .14s;pointer-events:none}
   #zoomveil.on{opacity:1;visibility:visible}
   #zoomprev{position:fixed;z-index:95;pointer-events:none;opacity:0;transition:opacity .12s;
@@ -976,7 +981,7 @@
 
 <div id="rail"><div id="railfill"></div></div>
 <div id="zoomveil"></div>
-<div id="proofVeil"><div class="pfbox"><div class="pfbar"><span id="pfLabel"></span><button id="pfClose">&times;</button></div><iframe id="pfFrame" src="about:blank"></iframe></div></div>
+<div id="proofVeil"><div class="pfbox"><div class="pfbar"><span id="pfLabel"></span><span class="pfacts"><a id="pfOpen" target="_blank" rel="noopener">Open in new tab &#8599;</a><button id="pfClose">&times;</button></span></div><div id="pfBody"></div></div></div>
 <div id="zoomprev"><img alt=""></div>
 <div id="modechip">Editing</div>
 <div id="swaphint">Click any image or logo to replace it</div>
@@ -1293,7 +1298,7 @@ function restore(){
 restore();
 
 function paintProof(btn){
- const has=!!(btn.dataset.url&&btn.dataset.url.trim());
+ const has=!!((btn.dataset.url&&btn.dataset.url.trim())||(btn.dataset.embed&&btn.dataset.embed.trim()));
  btn.classList.toggle("unset",!has);
  const lab=btn.dataset.label||"Open";
  const lb=btn.querySelector(".plabel");if(lb)lb.textContent=has?lab:("+ "+lab);
@@ -1301,32 +1306,39 @@ function paintProof(btn){
 function paintAllProofs(){document.querySelectorAll(".proof").forEach(paintProof);}
 function proofClick(btn){
  if(editing){
-  const cur=btn.dataset.url||"";
-  const url=prompt('Link "'+(btn.dataset.label||"this")+'" to a URL. Leave blank to clear.',cur);
-  if(url===null)return;
-  const trimmed=url.trim();
-  if(!trimmed){delete btn.dataset.url;delete btn.dataset.mode;}
+  const cur=btn.dataset.embed||btn.dataset.url||"";
+  const raw=prompt('Paste a URL or an embed snippet for "'+(btn.dataset.label||"this")+'". Leave blank to clear.',cur);
+  if(raw===null)return;
+  const t=raw.trim();
+  if(!t){delete btn.dataset.url;delete btn.dataset.embed;delete btn.dataset.mode;}
   else{
    const lab=prompt("What does this open? This shows on hover.",btn.dataset.label||"");
    if(lab!==null&&lab.trim())btn.dataset.label=lab.trim();
-   const asFrame=confirm("Show it inline, in a panel over the deck?\n\nOK = embed inline (iframe)\nCancel = open in a new tab");
-   btn.dataset.url=trimmed;btn.dataset.mode=asFrame?"iframe":"link";
+   if(/<\s*(iframe|embed|video|img|blockquote|script)/i.test(t)){
+    btn.dataset.embed=t;
+    const m=t.match(/src\s*=\s*["']([^"']+)["']/i);
+    if(m)btn.dataset.url=m[1];else delete btn.dataset.url;
+   }else{delete btn.dataset.embed;btn.dataset.url=t;}
+   delete btn.dataset.mode;
   }
   paintProof(btn);
   const sec=btn.closest(".slide");if(sec)sec.dataset.dirty="1";
   save();
   return;
  }
- const url=btn.dataset.url;if(!url)return;
- if(btn.dataset.mode==="iframe"){
-  $id("pfLabel").textContent=btn.dataset.label||"";
-  $id("pfFrame").src=url;
-  $id("proofVeil").classList.add("on");
- }else{window.open(url,"_blank","noopener");}
+ const url=btn.dataset.url||"",embed=btn.dataset.embed||"";
+ if(!url&&!embed)return;
+ $id("pfLabel").textContent=btn.dataset.label||"";
+ const op=$id("pfOpen");
+ if(url){op.href=url;op.hidden=false;}else{op.removeAttribute("href");op.hidden=true;}
+ $id("pfBody").innerHTML=embed||('<iframe src="'+url+'" referrerpolicy="no-referrer"></iframe>'+
+   '<div class="pfhint">Nothing showing? Some tools block being embedded. Use Open in new tab.</div>');
+ $id("proofVeil").classList.add("on");
 }
 document.addEventListener("click",e=>{const b=e.target.closest(".proof");if(b){e.stopPropagation();proofClick(b);}});
-$id("pfClose").addEventListener("click",()=>{$id("proofVeil").classList.remove("on");$id("pfFrame").src="about:blank";});
-$id("proofVeil").addEventListener("click",e=>{if(e.target.id==="proofVeil"){$id("proofVeil").classList.remove("on");$id("pfFrame").src="about:blank";}});
+function closeProof(){$id("proofVeil").classList.remove("on");$id("pfBody").innerHTML="";}
+$id("pfClose").addEventListener("click",closeProof);
+$id("proofVeil").addEventListener("click",e=>{if(e.target.id==="proofVeil")closeProof();});
 paintAllProofs();
 
 const visible=()=>slides.filter(s=>!hidden[s.dataset.uid]);
@@ -1497,7 +1509,7 @@ addEventListener("keydown",e=>{
   else if(cur.querySelector("#sysSw")){sysi=(sysi+1)%SYSL.length;drawSys();}}
  else if(k==="t"||k==="T"){const x=slides.findIndex(s=>s.dataset.title==="Three things to take back");if(x>=0)show(x);}
  else if(k==="o"||k==="O"){$id("ov").classList.toggle("on");}
- else if(k==="Escape"){$id("ov").classList.remove("on");$id("proofVeil").classList.remove("on");if(editing)setMode(false);}
+ else if(k==="Escape"){$id("ov").classList.remove("on");closeProof();if(editing)setMode(false);}
  else if(k==="e"||k==="E"){setMode(!editing);}
  else if(k==="h"||k==="H"){heatMode=heatMode==="heatmap"?"focus":"heatmap";drawHeat();}
  else if(k==="g"||k==="G"){gazeMode=(gazeMode+1)%GMODES.length;drawGaze();}
