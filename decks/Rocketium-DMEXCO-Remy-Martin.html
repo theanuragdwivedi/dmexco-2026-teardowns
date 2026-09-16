@@ -261,9 +261,11 @@
   .xray{display:flex;gap:56px;align-items:center;justify-content:center;width:100%;flex:1}
   .xwrap{position:relative;flex:none;width:440px;height:440px;border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--hair)}
   .xwrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-  .xnote{position:absolute;background:rgba(13,13,13,.9);color:#fff;font-size:13px;font-weight:600;padding:6px 11px;border-radius:8px;
-    max-width:210px;line-height:1.3}
-  .xnote::after{content:"";position:absolute;width:8px;height:8px;background:var(--red);border-radius:50%;box-shadow:0 0 0 3px rgba(250,60,27,.3)}
+  .xobs{margin-bottom:18px}
+  .xobs .xo{display:flex;gap:11px;font-size:17px;line-height:1.4;color:var(--ink-2);padding:7px 0;border-top:1px solid var(--hair)}
+  .xobs .xo:first-child{border-top:0}
+  .xobs .xo::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--red);margin-top:8px}
+  .xobs.ok .xo::before{background:var(--green)}
   .findcard{background:#fff;border:1px solid var(--hair);border-left:4px solid var(--red);border-radius:12px;padding:13px 16px;margin-bottom:11px}
   .findcard .ft{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);margin-bottom:5px}
   .findcard .fb{font-size:18px;line-height:1.4;color:var(--ink)}
@@ -1160,7 +1162,7 @@ const XR=[
  {lab:"01 · What the page showed",img:"c4",notes:[{x:"52%",y:"18%",t:"Bottle lit dramatically. No person, no occasion, no instruction."}],
   cards:[["Gate","Design critique"],["Finding","Slot 4 was a mood shot. Striking, and answering nothing a reviewer asked."]],ok:false},
  {lab:"02 · What the reviews said",img:"c4",notes:[{x:"20%",y:"62%",t:"29 reviews call it harsh. All of them drank it neat and unprepared."},{x:"58%",y:"38%",t:"45 call it smooth. All of them name a technique."}],
-  cards:[["Finding","The variable is method, not liquid"],["Finding","Two reviewers reached a brandy warmer with no help from the page"]],ok:false},
+  cards:[["Finding","Technique is what separates the two groups"],["Finding","Two reviewers reached a brandy warmer with no help from the page"]],ok:false},
  {lab:"03 · What was built",img:"p6",notes:[{x:"16%",y:"70%",t:"Room temperature, warm the glass in the palm"},{x:"48%",y:"70%",t:"Large clear cube, chilled glass"},{x:"80%",y:"70%",t:"25ml water splash"}],
   cards:[["Applied","Slot 06 rebuilt with temperature, glassware and measures"],["Applied","Servings per bottle added along the base"]],ok:true}];
 let xi=0;
@@ -1168,10 +1170,12 @@ function drawXray(){
  $id("xraySw").innerHTML=XR.map((x,j)=>
   '<button class="swbtn'+(j===xi?" on":"")+'" data-x="'+j+'">'+x.lab+'</button>').join("");
  const x=XR[xi];
- $id("xrayWrap").innerHTML='<img src="'+img(x.img)+'" alt="">'+
-  x.notes.map(n=>'<div class="xnote" style="left:'+n.x+';top:'+n.y+'">'+n.t+'</div>').join("");
- $id("xrayBody").innerHTML=x.cards.map(c=>
-  '<div class="findcard'+(x.ok?" ok":"")+'"><div class="ft">'+c[0]+'</div><div class="fb">'+c[1]+'</div></div>').join("");
+ $id("xrayWrap").innerHTML='<img src="'+img(x.img)+'" alt="">';
+ $id("xrayBody").innerHTML=
+  (x.notes.length?'<div class="xobs'+(x.ok?" ok":"")+'">'+
+    x.notes.map(n=>'<div class="xo">'+n.t+'</div>').join("")+'</div>':'')+
+  x.cards.map(c=>
+   '<div class="findcard'+(x.ok?" ok":"")+'"><div class="ft">'+c[0]+'</div><div class="fb">'+c[1]+'</div></div>').join("");
 }
 drawXray();
 $id("xraySw").addEventListener("click",e=>{
