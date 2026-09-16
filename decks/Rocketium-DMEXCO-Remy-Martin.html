@@ -375,7 +375,6 @@
   .proof svg{width:15px;height:15px;flex:none;stroke:currentColor}
   .proof.unset{opacity:.5;border-style:dashed}
   body.editing .proof{outline:2px dashed rgba(108,92,231,.55);outline-offset:3px}
-  .opener .proof{top:32px;right:132px}
   #proofVeil{position:fixed;inset:0;z-index:96;background:rgba(6,6,10,.7);opacity:0;visibility:hidden;transition:opacity .16s;
     display:flex;align-items:center;justify-content:center}
   #proofVeil.on{opacity:1;visibility:visible}
@@ -722,7 +721,6 @@
 <section class="slide bleed" data-chap="1" data-stage="5" data-opener="1" data-title="Stage 5 — Review"></section>
 
 <section class="slide" data-chap="1" data-stage="5" data-title="Review, end to end">
-  <div class="proof unset" data-pid="reviewlive" data-label="See the real review run"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="plabel">+ See the real review run</span></div>
   <h2 class="d2 xs" data-edit>Automated checks, AI judgement, <span class="ul">human sign-off.</span></h2>
   <div style="flex:1;display:flex;gap:38px;align-items:stretch;margin-top:20px">
     <div style="flex:1;min-width:0;display:flex;flex-direction:column">
@@ -1015,7 +1013,6 @@ const STAGE_BLURB=[
  "Produce the set. Every asset carries the job it does, the evidence behind it, and the reason it earned its slot.",
  "Five gates before anyone outside the room sees it. Attention, platform, brand, design critique, and a human with an opinion."];
 const PROOFSVG='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
-const PROOFLABEL=["See it in Intelligence: Audience","See it in Intelligence: Competition","See the workflow node","See it in Generate Creative","See the Compliance Check"];
 const STAGE_HANDOFF=[
  ["The brief, and the listing as it stands today","Findings ranked by how many reviews they touch"],
  ["Findings ranked by weight of evidence","One whitespace claim nobody else in the category can make"],
@@ -1231,7 +1228,6 @@ document.querySelectorAll('[data-opener]').forEach(sec=>{
  STAGES.map((x,j)=>'<div class="it'+(j===si-1?' cur':'')+'"><img src="'+ASSETS[x.ic]+'" alt="">'+x.n+'</div>').join("")+
  '</div><div class="body"><div class="stageno" style="color:'+s.a+'">STAGE 0'+si+' / 05</div>'+
  '<h2 class="d2" data-edit>'+s.n+'</h2><div class="lede" style="max-width:640px" data-edit>'+STAGE_BLURB[si-1]+'</div>'+
- '<div class="proof unset" data-pid="stage'+si+'" data-label="'+PROOFLABEL[si-1]+'">'+PROOFSVG+'<span class="plabel">+ '+PROOFLABEL[si-1]+'</span></div>'+
  '<div class="handoff"><div class="hoff"><div class="hk" style="color:'+s.a+'">Receives</div><div class="hv" data-edit>'+STAGE_HANDOFF[si-1][0]+'</div></div>'+
  '<div class="ha">&rarr;</div><div class="hoff"><div class="hk" style="color:'+s.a+'">Delivers</div><div class="hv" data-edit>'+STAGE_HANDOFF[si-1][1]+'</div></div></div>'+
  '</div></div>';
