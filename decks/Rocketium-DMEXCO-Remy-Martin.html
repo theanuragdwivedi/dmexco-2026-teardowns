@@ -396,18 +396,21 @@
   .rvpanel{background:#141414;border-radius:14px;padding:16px 18px;color:#EDEDED}
   .rvpanel .pt{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#9A9A9A;
     letter-spacing:.09em;text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid #262626;margin-bottom:12px}
-  .rvrow{display:flex;justify-content:space-between;align-items:center;font-size:15px;padding:7px 0}
+  .rvrow{display:flex;justify-content:space-between;align-items:center;font-size:15px;padding:10px 0}
   .rvrow .rl{color:#B9B9B9} .rvrow .rv{font-weight:700}
   .ok{color:#2ED573} .bad{color:#FF5E57}
   .scorebig{display:flex;align-items:center;gap:14px;margin-top:12px;padding-top:12px;border-top:1px solid #262626}
   .scorebig .sn{font-family:var(--disp);font-weight:800;font-size:44px;line-height:1;color:#2ED573}
   .scorebig .sl{font-size:13px;color:#9A9A9A;line-height:1.35}
   .catbar{display:flex;align-items:center;gap:10px;font-size:14px;margin-top:8px}
+  .catgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 34px;margin-top:10px}
+  .catgrid .catbar{margin-top:0}
+  .catgrid .cn2{width:auto;flex:none}
   .catbar .cn2{width:110px;color:var(--ink-2)}
   .catbar .ct{flex:1;height:7px;background:rgba(0,0,0,.08);border-radius:4px;position:relative}
   .catbar .cf{position:absolute;inset:0 auto 0 0;border-radius:4px}
   .catbar .cp{width:44px;text-align:right;font-weight:700;font-size:14px}
-  .rulecard{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:11px 14px;margin-bottom:8px}
+  .rulecard{background:#fff;border:1px solid var(--hair);border-radius:12px;padding:16px 19px;margin-bottom:15px}
   .rulecard .rc{font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
   .rulecard .rr{font-size:16px;margin-top:5px;display:flex;align-items:center;gap:8px}
   .bdgs{display:inline-flex;gap:5px}
@@ -721,7 +724,7 @@
 <section class="slide" data-chap="1" data-stage="5" data-title="Review, end to end">
   <div class="proof unset" data-pid="reviewlive" data-label="See the real review run"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span class="plabel">+ See the real review run</span></div>
   <h2 class="d2 xs" data-edit>Automated checks, AI judgement, <span class="ul">human sign-off.</span></h2>
-  <div style="flex:1;display:flex;gap:20px;align-items:stretch;margin-top:14px">
+  <div style="flex:1;display:flex;gap:38px;align-items:stretch;margin-top:20px">
     <div style="flex:1;min-width:0;display:flex;flex-direction:column">
       <div class="rowlab">Auto-review against platform rules<span class="ln"></span></div>
       <div class="rvpanel" style="flex:1">
@@ -734,14 +737,8 @@
           <div class="sl">rules passed on this tile.<br>One blocks launch.</div></div>
         <div style="margin-top:16px;padding-top:14px;border-top:1px solid #262626">
           <div style="font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#7A7A7A">Why "main image policy" only checks slot 1</div>
-          <div style="font-size:14.5px;color:#C7C7C7;line-height:1.5;margin-top:7px" data-edit>The hero is also the thumbnail a shopper clicks from the category and search page, so it is held to a stricter bar than the other eight: plain ground, no lifestyle staging, no promotional text. That bar tightens or relaxes by marketplace: strict here, looser on platforms that allow lifestyle heroes. Slot 1 in this set is a plain packshot, so the gate passes clean.</div>
+          <div style="font-size:14.5px;color:#C7C7C7;line-height:1.5;margin-top:7px" data-edit>The hero doubles as the thumbnail in category and search, so it is held to a stricter bar: plain ground, no staging, no text. How strict depends on the marketplace. Slot 1 here is a plain packshot, so it passes.</div>
         </div>
-      </div>
-      <div style="margin-top:14px">
-        <div class="catbar"><div class="cn2">Platform</div><div class="ct"><div class="cf" style="width:100%;background:var(--green)"></div></div><div class="cp" style="color:var(--green)">100%</div></div>
-        <div class="catbar"><div class="cn2">Accessibility</div><div class="ct"><div class="cf" style="width:100%;background:var(--green)"></div></div><div class="cp" style="color:var(--green)">100%</div></div>
-        <div class="catbar"><div class="cn2">Brand</div><div class="ct"><div class="cf" style="width:56%;background:var(--red)"></div></div><div class="cp" style="color:var(--red)">56%</div></div>
-        <div class="catbar"><div class="cn2">Attention</div><div class="ct"><div class="cf" style="width:86%;background:var(--s4a)"></div></div><div class="cp" style="color:var(--s4b)">86%</div></div>
       </div>
     </div>
     <div style="flex:1;min-width:0">
@@ -754,10 +751,14 @@
         <div class="rr"><span class="bdgs"><span class="bdg2 crit">Critical</span></span> Packaging shown is not in the parcel</div></div>
       <div class="rulecard"><div class="rc">Design critique</div>
         <div class="rr"><span class="bdgs"><span class="bdg2 min">Minor</span></span> Slot 5 base line crosses the medallion</div></div>
-      <div class="rowlab" style="margin-top:16px">Fix before launch<span class="ln"></span></div>
-      <div class="fixcard"><b>Slot 02.</b> Correct the gift tag, then re-check every composited label at 100%.</div>
-      <div class="fixcard"><b>Slot 02.</b> Operations confirm the card and sleeve, or the tile does not ship.</div>
     </div>
+  </div>
+  <div class="rowlab" style="margin-top:24px">Score across every check<span class="ln"></span></div>
+  <div class="catgrid">
+    <div class="catbar"><div class="cn2">Platform</div><div class="ct"><div class="cf" style="width:100%;background:var(--green)"></div></div><div class="cp" style="color:var(--green)">100%</div></div>
+    <div class="catbar"><div class="cn2">Accessibility</div><div class="ct"><div class="cf" style="width:100%;background:var(--green)"></div></div><div class="cp" style="color:var(--green)">100%</div></div>
+    <div class="catbar"><div class="cn2">Brand</div><div class="ct"><div class="cf" style="width:56%;background:var(--red)"></div></div><div class="cp" style="color:var(--red)">56%</div></div>
+    <div class="catbar"><div class="cn2">Attention</div><div class="ct"><div class="cf" style="width:86%;background:var(--s4a)"></div></div><div class="cp" style="color:var(--s4b)">86%</div></div>
   </div>
   <div class="punch" data-edit>The checks catch what can be measured. <span class="red">Whether it&rsquo;s good enough is still someone&rsquo;s call.</span></div>
 </section>
