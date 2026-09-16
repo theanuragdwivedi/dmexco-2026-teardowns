@@ -88,8 +88,8 @@
   .opener{display:flex;height:100%;width:100%}
   .opener .rail{width:410px;flex:none;padding:70px 0 70px 58px;display:flex;flex-direction:column;justify-content:center;gap:30px;
     background-image:var(--dots-d);background-size:7px 7px}
-  .opener .rail .it{display:flex;align-items:center;gap:15px;font-family:var(--disp);font-weight:700;font-size:28px;letter-spacing:-.02em;color:rgba(255,255,255,.5)}
-  .opener .rail .it img{width:28px;height:28px;filter:grayscale(1) brightness(0) invert(1);opacity:.3}
+  .opener .rail .it{display:flex;align-items:center;gap:15px;font-family:var(--disp);font-weight:700;font-size:28px;letter-spacing:-.02em;color:rgba(255,255,255,.82)}
+  .opener .rail .it img{width:28px;height:28px;filter:grayscale(1) brightness(0) invert(1);opacity:.7}
   .opener .rail .it.cur{background:#fff;color:var(--ink);margin-left:-58px;padding:15px 28px 15px 58px;
     border-radius:0 60px 60px 0;box-shadow:0 8px 30px rgba(0,0,0,.18)}
   .opener .rail .it.cur img{filter:none;opacity:1;width:38px;height:38px}
@@ -363,9 +363,11 @@
   .hovcard .hn{font-size:13px;line-height:1.45;color:var(--ink-2);margin-top:11px;padding-top:10px;border-top:1px solid var(--hair)}
   .quiet{font-size:16px!important;color:var(--ink-3)!important}
   .dark .quiet,.hot .quiet{color:rgba(255,255,255,.5)!important}
-  .proof.mini{position:static;padding:4px 7px;gap:0;border-radius:8px;margin-left:8px}
+  .proof.mini{position:static;padding:5px 8px;gap:0;border-radius:8px;margin-left:8px;transition:background .15s ease}
   .proof.mini svg{width:14px;height:14px}
-  .proof.mini .plabel{display:none}
+  .proof.mini .plabel{display:inline-block;max-width:0;margin-left:0;overflow:hidden;white-space:nowrap;opacity:0;
+    transition:max-width .22s ease,opacity .18s ease,margin-left .22s ease}
+  .proof.mini:hover .plabel,.proof.mini:focus .plabel{max-width:300px;opacity:1;margin-left:7px}
 
   .proof{position:absolute;top:26px;right:126px;z-index:16;display:inline-flex;align-items:center;gap:7px;
     font-family:var(--disp);font-weight:700;font-size:12.5px;color:var(--ink);letter-spacing:.01em;
@@ -1012,6 +1014,7 @@ const STAGE_BLURB=[
  "Turn findings into decisions. What the page has to say, in what order, and what it should deliberately refuse to say.",
  "Produce the set. Every asset carries the job it does, the evidence behind it, and the reason it earned its slot.",
  "Five gates before anyone outside the room sees it. Attention, platform, brand, design critique, and a human with an opinion."];
+const STAGEPROOF=["Intelligence: Audience","Intelligence: Competition","Workflow: Design Strategy","Workflow: Generate Creative","Workflow: Design Critique"];
 const PROOFSVG='<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
 const STAGE_HANDOFF=[
  ["The brief, and the listing as it stands today","Findings ranked by how many reviews they touch"],
@@ -1224,7 +1227,7 @@ hydrateHovers();
 
 document.querySelectorAll('[data-opener]').forEach(sec=>{
  const si=+sec.dataset.stage,s=STAGES[si-1];
- sec.innerHTML='<div class="opener"><div class="rail" style="background:linear-gradient(160deg,'+s.a+','+s.b+')">'+
+ sec.innerHTML='<div class="opener"><div class="rail" style="background:linear-gradient(160deg,'+s.a+','+s.b+'),linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.22));background-blend-mode:multiply">'+
  STAGES.map((x,j)=>'<div class="it'+(j===si-1?' cur':'')+'"><img src="'+ASSETS[x.ic]+'" alt="">'+x.n+'</div>').join("")+
  '</div><div class="body"><div class="stageno" style="color:'+s.a+'">STAGE 0'+si+' / 05</div>'+
  '<h2 class="d2" data-edit>'+s.n+'</h2><div class="lede" style="max-width:640px" data-edit>'+STAGE_BLURB[si-1]+'</div>'+
@@ -1304,6 +1307,8 @@ function proofClick(btn){
   const trimmed=url.trim();
   if(!trimmed){delete btn.dataset.url;delete btn.dataset.mode;}
   else{
+   const lab=prompt("What does this open? This shows on hover.",btn.dataset.label||"");
+   if(lab!==null&&lab.trim())btn.dataset.label=lab.trim();
    const asFrame=confirm("Show it inline, in a panel over the deck?\n\nOK = embed inline (iframe)\nCancel = open in a new tab");
    btn.dataset.url=trimmed;btn.dataset.mode=asFrame?"iframe":"link";
   }
@@ -1336,7 +1341,7 @@ function chrome(sec){
  if(st){html+='<span class="sep"></span><span class="pipe">'+STAGES.map((s,j)=>{const n=j+1;
    if(n===st)return '<span class="p cur" style="background:linear-gradient(135deg,'+s.a+','+s.b+')">'+s.n+'</span>';
    return '<span class="p'+(n<st?" done":"")+'" style="'+(n<st?"background:"+s.a+";opacity:.55":"")+'"></span>';}).join("")+'</span>'+
-   '<div class="proof mini unset" data-pid="crumb-'+sec.dataset.uid+'" data-label="Proof link" title="Proof link">'+PROOFSVG+'<span class="plabel">+</span></div>';}
+   '<div class="proof mini unset" data-pid="crumb-'+sec.dataset.uid+'" data-label="'+STAGEPROOF[st-1]+'">'+PROOFSVG+'<span class="plabel">+ '+STAGEPROOF[st-1]+'</span></div>';}
  cb.innerHTML=html;
  sec.appendChild(cb);
  sec.insertAdjacentHTML("beforeend",MARK);
