@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+  command = "echo 'static deck, no build step'"
+
+[[redirects]]
+  from = "/"
+  to = "/Rocketium-DMEXCO-Remy-Martin.html"
+  status = 200
